@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD
 
 
 class Game:
@@ -14,6 +14,9 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
+        self.x_pos_cloud_one = 330
+        self.y_pos_cloud = 130
+        self.x_pos_cloud_two = 700
 
     def run(self):
         # Game loop: events - update - draw
@@ -43,7 +46,11 @@ class Game:
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+        self.screen.blit(CLOUD, (self.x_pos_cloud_one, self.y_pos_cloud))
+        self.screen.blit(CLOUD, (self.x_pos_cloud_two, self.y_pos_cloud))
         if self.x_pos_bg <= -image_width:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+            self.screen.blit(CLOUD, (self.x_pos_cloud_one, self.y_pos_cloud))
+            self.screen.blit(CLOUD, (self.x_pos_cloud_two, self.y_pos_cloud))            
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
