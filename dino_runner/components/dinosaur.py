@@ -27,6 +27,7 @@ class Dinosaur:
         
         if user_imput[pygame.K_DOWN]:
             self.duck()
+            self.dino_run = False
         
         if self.dino_jump:
             self.jump()
@@ -61,5 +62,4 @@ class Dinosaur:
         if self.dino_jump:
             self.jump_speed = -self.JUMP_SPEED # cancelar el salto si el dinosaurio estaba saltando
             self.dino_jump = False  
-        self.dino_run = False
         self.step_index += 1        
