@@ -30,7 +30,7 @@ class Dinosaur:
         
         if self.dino_jump:
             self.jump()
-        if user_imput[pygame.K_UP] and not self.dino_jump:
+        if user_imput[pygame.K_UP]or user_imput[pygame.K_w] and not self.dino_jump:
             self.dino_jump = True
             self.dino_run = False
         elif not self.dino_jump:
@@ -60,6 +60,6 @@ class Dinosaur:
         self.dino_rect.y = 350
         if self.dino_jump:
             self.jump_speed = -self.JUMP_SPEED # cancelar el salto si el dinosaurio estaba saltando
-            self.dino_jump = False  # ajustar la posición del rectángulo para simular el agachamiento
+            self.dino_jump = False  
         self.dino_run = False
         self.step_index += 1        
