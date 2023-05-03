@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD, FONT_STYLE
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
@@ -27,13 +27,17 @@ class Game:
         self.menu = Menu(self.screen, "Please press any key to start...")
         self.running = False
         self.score = Counter()
+        self.death_menu = Menu(self.screen, "-GAME OVER-")
+
 
     def execute(self):
         self.running = True
         while self.running:
             if not self.playing:
-                self.show_menu()
-        
+                if self.obstacle_manager.deaths == 0:
+                    self.show_menu()
+                else:
+                    self.death_show_menu()
         pygame.display.quit()
         pygame.quit()
 
@@ -88,6 +92,35 @@ class Game:
         self.screen.blit(ICON, (half_screen_width-50, half_screen_height-140))
         self.menu.draw(self.screen)
         self.menu.update(self)
+    
+    def death_show_menu(self):
+        self.death_menu.reset_screen_color(self.screen)
+        if  self.score.max_score:
+            max_score = max(self.score.max_score)
+        else:
+            max_score = 0
+        half_screen_width = SCREEN_WIDTH // 2
+        half_screen_height = SCREEN_HEIGHT // 2
+        font = pygame.font.Font(FONT_STYLE, 30)
+        text = font.render(f"Score: {self.score.count}", True, (0,0,0))
+        text2 = font.render(f"Deaths: {self.obstacle_manager.deaths}", True, (0,0,0))
+        text3 = font.render(f"Max Score: {max_score}", True, (0,0,0))
+        text4 = font.render("Please press any key to start...", True, (0,0,0))
+        text_rect = text.get_rect()
+        text2_rect = text2.get_rect()
+        text3_rect = text3.get_rect()
+        text4_rect = text4.get_rect()
+        text2_rect.center = (550, 400)
+        text_rect.center = (550, 350)
+        text3_rect.center = (550, 450)
+        text4_rect.center = (550, 550)
+        self.screen.blit(ICON, (half_screen_width-50, half_screen_height-140))
+        self.screen.blit(text, text_rect)
+        self.screen.blit(text2, text2_rect)
+        self.screen.blit(text3, text3_rect)
+        self.screen.blit(text4, text4_rect)
+        self.death_menu.draw(self.screen)
+        self.death_menu.update(self)
         
     def update_score(self):
         self.score.update()

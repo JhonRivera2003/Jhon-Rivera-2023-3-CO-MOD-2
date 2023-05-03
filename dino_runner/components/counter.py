@@ -4,10 +4,11 @@ from dino_runner.utils.constants import FONT_STYLE
 class Counter:
     def __init__(self):
         self.count = 0
-        
+        self.max_score = []
     
     def update(self):
         self.count += 1
+        self.max_score.append(self.count)
     
     def draw(self, screen):
         font = pygame.font.Font(FONT_STYLE, 30)
