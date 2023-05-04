@@ -2,7 +2,7 @@ import pygame
 import random
 from dino_runner.components.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
-from dino_runner.utils.constants import SMALL_CACTUS, SHIELD_TYPE
+from dino_runner.utils.constants import SMALL_CACTUS, SHIELD_TYPE, HAMMER_TYPE
 
 class ObstacleManager:
     def __init__(self):
@@ -26,6 +26,10 @@ class ObstacleManager:
                     break
                 else:
                     self.obstacles.remove(obstacle)
+            if game.hammer.rect.colliderect(obstacle.rect):
+                game.hammer.flag_hammer = False
+                self.obstacles.remove(obstacle)
+
 
 
     def draw(self, screen):

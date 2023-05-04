@@ -1,11 +1,12 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, HAMMER_TYPE, SHIELD_TYPE, CLOUD
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
 from dino_runner.components.counter import Counter
 from dino_runner.components.powerups.powerup_manager import PowerupManager
+from dino_runner.components.powerups.powerup import Launcher
 
 class Game:
     GAME_SPEED = 20
@@ -17,6 +18,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.playing = False
         self.game_speed = self.GAME_SPEED
+        self.x_pos_cloud_one = 330
+        self.y_pos_cloud = 130
+        self.x_pos_cloud_two = 700
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
@@ -27,6 +31,10 @@ class Game:
         self.death_count = Counter()
         self.highest_score = Counter()
         self.powerup_manager = PowerupManager()
+        self.flag_hammer = False
+        self.hammer = Launcher()
+
+
 
     def execute(self):
         self.running = True
@@ -54,10 +62,12 @@ class Game:
 
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input)
+        self.player.update(user_input, self)
         self.obstacle_manager.update(self)
         self.update_score()
         self.powerup_manager.update(self)
+        if self.flag_hammer:
+            self.hammer.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -68,11 +78,15 @@ class Game:
         self.score.draw(self.screen)
         self.powerup_manager.draw(self.screen)
         self.power_up()
+        if self.flag_hammer:
+            self.hammer.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
     def draw_background(self):
         image_width = BG.get_width()
+        self.screen.blit(CLOUD, (self.x_pos_cloud_one, self.y_pos_cloud))
+        self.screen.blit(CLOUD, (self.x_pos_cloud_two, self.y_pos_cloud))
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
         if self.x_pos_bg <= -image_width:
@@ -113,10 +127,11 @@ class Game:
         self.player.reset()
 
     def power_up(self):
-        if self.player.has_power_up:
+        if self.player.type == SHIELD_TYPE:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks())/1000, 2)
             if time_to_show >= 0:
                 self.menu.draw(self.screen, f"{self.player.type.capitalize()} enabled for {time_to_show} seconds", 500, 50)
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE
+        
