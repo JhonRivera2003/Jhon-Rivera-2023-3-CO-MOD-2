@@ -20,7 +20,7 @@ class Menu:
         screen.blit(self.text, self.text_rect)
 
     def reset_screen_color(self, screen):
-        screen.fill((255, 255, 255))
+        screen.fill((175, 175, 175))
 
     def hundle_event_on_menu(self, game):
         for event in pygame.event.get():

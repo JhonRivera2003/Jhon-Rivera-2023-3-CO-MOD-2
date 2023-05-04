@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, HAMMER_TYPE, SHIELD_TYPE, CLOUD
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, HAMMER_TYPE, SHIELD_TYPE, CLOUD, GAME_OVER, RESET
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
@@ -105,10 +105,11 @@ class Game:
             self.menu.draw(self.screen, "Press any key to start...")
         else:
             self.update_higest_score()
-            self.menu.draw(self.screen, "-GAME OVER-")
-            self.menu.draw(self.screen, f"Score: {self.score.count}", half_screen_width, 350)
-            self.menu.draw(self.screen, f"Deaths: {self.death_count.count}", half_screen_width, 400)
-            self.menu.draw(self.screen, f"Higest Score: {self.highest_score.count}", half_screen_width, 500)
+            self.screen.blit(GAME_OVER, (375, 300))
+            self.menu.draw(self.screen, f"Score: {self.score.count}", half_screen_width, 375)
+            self.menu.draw(self.screen, f"Deaths: {self.death_count.count}", half_screen_width, 415)
+            self.screen.blit(RESET, (500, 450))
+            self.menu.draw(self.screen, f"Higest Score: {self.highest_score.count}", half_screen_width, 550)
 
         self.menu.update(self)
 
